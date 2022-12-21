@@ -3,13 +3,20 @@ pipeline {
     // tools{
     //     maven 'maven:3.6.8'
     // }
+   
     stages{
-        stage('Build Maven'){
-            steps{
-               checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Akhileshcareer/devops-automation']]])
-                sh 'mvn clean install'
-            }
+         stage('build'){
+        withMaven(maven: 'mvn') {
+            checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Akhileshcareer/devops-automation']]])
+            sh "mvn clean package"
         }
+    }
+        // stage('Build Maven'){
+        //     steps{
+        //        checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Akhileshcareer/devops-automation']]])
+        //         sh 'mvn clean install'
+        //     }
+        // }
         stage('Build docker image'){
             steps{
                 script{
